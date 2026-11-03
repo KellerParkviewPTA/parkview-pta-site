@@ -3,7 +3,7 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 # Netlify auto-detects the Netlify Forms (data-netlify="true") in the built
 # HTML, and automatically serves dist/404.html for unmatched routes —
