@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { getCollection } from 'astro:content';
+
+const meetings = (await getCollection('meetings')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const today = new Date(new Date().setHours(0, 0, 0, 0));
+const next = meetings
+  .filter((m) => m.data.date.valueOf() >= today.valueOf())
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())[0];
+---
+
+<Layout title="General Body Meetings" description="Meeting schedule, agendas, and minutes for the Parkview Elementary PTA.">
+  <PageHero eyebrow="Meetings" title="General Body Meetings" subtitle="All Parkview families are welcome to attend." />
+
+  <section class="section !pt-0">
+    {
+      next ? (
+        <div class="reading-panel mx-auto max-w-2xl text-center">
+          <p class="badge mb-3 bg-ink/5 text-ink/70">Next Meeting</p>
+          <h2 class="font-display text-2xl font-bold">{next.data.title}</h2>
+          <p class="mt-2 text-ink/70">
+            {next.data.date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+            {next.data.time && ` · ${next.data.time}`}
+          </p>
+          {next.data.location && <p class="text-ink/60">{next.data.location}</p>}
+        </div>
+      ) : (
+        <p class="text-center text-paper/60">No upcoming meetings scheduled yet. Check back soon!</p>
+      )
+    }
+  </section>
+
+  <section class="section !pt-0">
+    <div class="reading-panel mx-auto max-w-3xl">
+      <h2 class="mb-6 font-display text-2xl font-bold">All Meetings, Agendas & Minutes</h2>
+      <div class="divide-y divide-ink/10">
+        {
+          meetings.map((m) => (
+            <div class="flex flex-wrap items-center justify-between gap-3 py-4">
+              <div>
+                <p class="font-bold text-ink">{m.data.title}</p>
+                <p class="text-sm text-ink/60">
+                  {m.data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  {m.data.time && ` · ${m.data.time}`} {m.data.location && `· ${m.data.location}`}
+                </p>
+              </div>
+              <div class="flex gap-2">
+                {m.data.agendaFile && (
+                  <a href={m.data.agendaFile} class="btn-outline !min-h-9 !px-4 !py-1.5 !text-xs" download>Agenda</a>
+                )}
+                {m.data.minutesFile && (
+                  <a href={m.data.minutesFile} class="btn-outline !min-h-9 !px-4 !py-1.5 !text-xs" download>Minutes</a>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>

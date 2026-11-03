@@ -1,0 +1,20 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AnnouncementCard from '../../components/AnnouncementCard.astro';
+import { getCollection } from 'astro:content';
+
+const announcements = (await getCollection('announcements')).sort(
+  (a, b) => (b.data.pinned ? 1 : 0) - (a.data.pinned ? 1 : 0) || b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout title="News & Announcements" description="Latest news and announcements from the Parkview Elementary PTA.">
+  <PageHero eyebrow="News" title="Announcements" subtitle="Stay up to date with everything happening at Parkview." />
+
+  <section class="section !pt-0">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {announcements.map((a) => <AnnouncementCard announcement={a} />)}
+    </div>
+  </section>
+</Layout>

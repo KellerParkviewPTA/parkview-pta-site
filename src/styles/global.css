@@ -1,0 +1,149 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Enable class-based dark mode: <html class="dark"> = bold black/gold theme (default).
+   Removing the class gives the light, high-readability theme. Toggled by DarkLightToggle.astro. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-ink: #0b0b0c;
+  --color-ink-soft: #17171a;
+  --color-ink-softer: #232327;
+  --color-paper: #f7f5ef;
+  --color-paper-soft: #efece2;
+  --color-gold: #d4af37;
+  --color-gold-bright: #ffc72c;
+  --font-display: "Fredoka", "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-sparkle: sparkle 2.5s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.6s ease-out both;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(15deg);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-body);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-paper text-ink dark:bg-ink dark:text-paper;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+
+  /* Highly visible focus ring for keyboard users (WCAG) */
+  :focus-visible {
+    outline: 3px solid var(--color-gold-bright);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  /* Skip-to-content link */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-5 focus:py-3 focus:font-bold focus:text-ink;
+  }
+}
+
+@layer components {
+  /* Reusable "light reading panel" — used inside bold pages for long text
+     (bylaws, minutes, policies) so paragraphs stay easy to read regardless
+     of the dark/light toggle state. */
+  .reading-panel {
+    @apply rounded-3xl border border-gold/20 bg-paper p-6 text-ink shadow-xl shadow-black/5 sm:p-10;
+  }
+
+  .reading-panel :is(h2, h3) {
+    @apply text-ink;
+  }
+
+  .btn,
+  .btn-gold,
+  .btn-outline,
+  .btn-ghost {
+    @apply inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-7 py-4 text-base font-bold tracking-wide transition-all duration-200 focus-visible:outline-offset-4 active:scale-[0.97];
+  }
+
+  .btn-gold {
+    @apply bg-gradient-to-r from-gold to-gold-bright text-ink shadow-lg shadow-gold/30 hover:shadow-gold/50 hover:brightness-105;
+  }
+
+  .btn-outline {
+    @apply border-2 border-gold text-gold hover:bg-gold hover:text-ink dark:text-gold-bright dark:hover:text-ink;
+  }
+
+  .btn-ghost {
+    @apply bg-ink-soft text-paper hover:bg-ink-softer dark:bg-paper/10 dark:hover:bg-paper/20;
+  }
+
+  .card {
+    @apply rounded-3xl border border-gold/15 bg-ink-soft p-6 shadow-lg shadow-black/20 transition-transform duration-200 hover:-translate-y-1 dark:border-gold/20;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full bg-gold/15 px-3 py-1 text-xs font-bold tracking-wide text-gold-bright uppercase;
+  }
+
+  .section {
+    @apply mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24;
+  }
+
+  .fade-up {
+    animation: var(--animate-fade-up);
+  }
+}

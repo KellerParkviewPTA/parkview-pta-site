@@ -1,0 +1,18 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+}
+const { eyebrow, title, subtitle } = Astro.props;
+---
+
+<div class="relative overflow-hidden bg-gradient-to-b from-ink-soft to-ink">
+  <div class="pointer-events-none absolute top-10 right-10 h-40 w-40 animate-float rounded-full bg-gold/10 blur-3xl"></div>
+  <div class="pointer-events-none absolute bottom-0 left-0 h-56 w-56 rounded-full bg-gold/5 blur-3xl"></div>
+  <div class="section relative py-16 text-center sm:py-20">
+    {eyebrow && <p class="fade-up badge mx-auto mb-4 w-fit">{eyebrow}</p>}
+    <h1 class="fade-up font-display text-4xl font-bold text-paper sm:text-5xl">{title}</h1>
+    {subtitle && <p class="fade-up mx-auto mt-4 max-w-2xl text-lg text-paper/70">{subtitle}</p>}
+  </div>
+</div>

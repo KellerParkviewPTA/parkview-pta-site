@@ -1,0 +1,113 @@
+---
+import siteConfig from '../site.config';
+import { primaryNav, moreNav } from '../nav.config';
+import SearchBar from './SearchBar.astro';
+import DarkLightToggle from './DarkLightToggle.astro';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 border-b border-gold/15 bg-ink/90 backdrop-blur-md">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+    <a href="/" class="flex items-center gap-2 shrink-0">
+      <img
+        src={siteConfig.logoPath}
+        alt={siteConfig.logoAltText}
+        class="h-11 w-11 rounded-full border-2 border-gold/40 object-cover sm:h-12 sm:w-12"
+        width="48"
+        height="48"
+      />
+      <span class="hidden font-display text-lg font-semibold text-paper sm:block">{siteConfig.ptaName}</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav aria-label="Primary" class="hidden items-center gap-1 lg:flex">
+      {
+        primaryNav.map((item) => (
+          <a
+            href={item.href}
+            class={`rounded-full px-3 py-2 text-sm font-semibold transition hover:bg-gold/10 hover:text-gold-bright ${
+              currentPath === item.href ? 'text-gold-bright' : 'text-paper/90'
+            }`}
+            aria-current={currentPath === item.href ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <div class="group relative">
+        <button class="flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold text-paper/90 transition hover:bg-gold/10 hover:text-gold-bright" aria-haspopup="true">
+          More
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="invisible absolute right-0 z-20 mt-1 w-64 translate-y-1 rounded-2xl border border-gold/20 bg-ink-soft p-2 opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+          {
+            moreNav.map((item) => (
+              <a href={item.href} class="block rounded-xl px-4 py-2.5 text-sm font-medium text-paper/90 hover:bg-gold/10 hover:text-gold-bright">
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <div class="hidden sm:block"><SearchBar /></div>
+      <DarkLightToggle />
+      <a href="/join" class="btn-gold !hidden !min-h-11 !px-5 !py-2.5 !text-sm lg:!inline-flex">Join the PTA</a>
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-gold/40 text-gold lg:hidden dark:text-gold-bright"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden border-t border-gold/15 bg-ink lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile menu">
+    <div class="max-h-[80vh] overflow-y-auto px-4 py-4">
+      <a href="/join" class="btn-gold mb-4 w-full !text-base">Join the PTA</a>
+      <div class="mb-2 sm:hidden"><SearchBar /></div>
+      <nav aria-label="Primary mobile" class="grid gap-1">
+        {
+          [...primaryNav, ...moreNav].map((item) => (
+            <a
+              href={item.href}
+              class={`rounded-xl px-3 py-3 text-base font-semibold transition hover:bg-gold/10 ${
+                currentPath === item.href ? 'text-gold-bright' : 'text-paper/90'
+              }`}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  // Close mobile menu when a link inside it is clicked
+  menu?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      toggle?.setAttribute('aria-expanded', 'false');
+    })
+  );
+</script>

@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Thank You!" noIndex={true}>
+  <section class="section flex flex-col items-center justify-center text-center">
+    <span class="mb-4 text-6xl">✅</span>
+    <h1 id="ty-heading" class="font-display text-4xl font-bold text-paper">Thank You!</h1>
+    <p id="ty-message" class="mx-auto mt-4 max-w-xl text-paper/70">
+      Your submission has been received. We'll be in touch soon.
+    </p>
+    <a href="/" class="btn-gold mt-8">Back to Home</a>
+  </section>
+</Layout>
+
+<script>
+  const messages: Record<string, { heading: string; message: string }> = {
+    volunteer: {
+      heading: "You're Signed Up!",
+      message: "Thanks for volunteering. You'll get a confirmation email with details soon.",
+    },
+    'volunteer-interest': {
+      heading: 'Thanks for Your Interest!',
+      message: "We'll reach out about volunteer opportunities that match your interests.",
+    },
+    contact: {
+      heading: 'Message Sent!',
+      message: "Thanks for reaching out. We'll reply as soon as we can.",
+    },
+    sponsor: {
+      heading: 'Thank You!',
+      message: "We're grateful for your interest in sponsoring Parkview PTA. We'll follow up soon.",
+    },
+  };
+
+  const params = new URLSearchParams(location.search);
+  const form = params.get('form');
+  if (form && messages[form]) {
+    const heading = document.getElementById('ty-heading');
+    const message = document.getElementById('ty-message');
+    if (heading) heading.textContent = messages[form].heading;
+    if (message) message.textContent = messages[form].message;
+  }
+</script>

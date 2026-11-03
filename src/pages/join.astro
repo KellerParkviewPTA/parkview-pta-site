@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import siteConfig from '../site.config';
+
+const benefits = [
+  { icon: '🗳️', title: 'A Real Voice', description: 'Vote on how PTA funds are spent at Parkview.' },
+  { icon: '🎉', title: 'Member Events', description: 'Invitations to member-only gatherings all year.' },
+  { icon: '📚', title: 'Classroom Impact', description: 'Directly fund grants, supplies, and enrichment for every classroom.' },
+  { icon: '🤝', title: 'Community', description: 'Connect with other Parkview families and staff.' },
+];
+---
+
+<Layout title="Join the PTA" description="Join the Parkview Elementary PTA. No meetings required.">
+  <PageHero eyebrow="Membership" title="Join the PTA" subtitle="No meetings required. Just support for your school, your way." />
+
+  <section class="section !pt-0">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        benefits.map((b) => (
+          <div class="card text-center">
+            <span class="mb-2 block text-3xl">{b.icon}</span>
+            <h3 class="font-display text-lg font-bold text-paper">{b.title}</h3>
+            <p class="mt-1 text-sm text-paper/60">{b.description}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section !pt-0">
+    <div class="reading-panel mx-auto max-w-2xl text-center">
+      <h2 class="font-display text-2xl font-bold">Ready to Join?</h2>
+      <p class="mt-2 text-ink/70">
+        Membership is handled through Texas PTA's official membership portal. Click below to sign up. It only
+        takes a minute.
+      </p>
+      <a href={siteConfig.links.joinPtaUrl} target="_blank" rel="noopener" class="btn-gold mx-auto mt-5">
+        Join the PTA Now
+      </a>
+    </div>
+  </section>
+</Layout>

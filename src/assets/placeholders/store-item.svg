@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Placeholder spirit wear product photo">
+  <rect width="400" height="400" fill="#17171A"/>
+  <path d="M130 90 L170 60 H230 L270 90 L310 130 L270 160 L250 140 V340 H150 V140 L130 160 L90 130 Z" fill="#D4AF37"/>
+  <text x="200" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#0B0B0C">PV</text>
+  <text x="200" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#F7F5EF" opacity="0.6">TODO: replace with product photo</text>
+</svg>

@@ -1,0 +1,203 @@
+# Decap CMS configuration — this file controls every form shown at /admin.
+# It mirrors src/content.config.ts field-for-field. If you add a field to a
+# collection schema there, add the matching widget here too.
+#
+# BACKEND SETUP (one-time, see README.md for full steps):
+#  1. Enable "Identity" and "Git Gateway" in your Netlify site dashboard
+#     (Site configuration -> Identity -> Enable Identity, then
+#     Identity -> Services -> Git Gateway -> Enable Git Gateway).
+#  2. Invite yourself as a user under Identity -> Invite users.
+#  3. Visit https://YOUR-SITE.netlify.app/admin and log in with that invite.
+backend:
+  name: git-gateway
+  branch: main
+
+# Images you upload in the admin panel are saved here so Astro's image
+# optimizer (astro:assets) can process them. Keep these two paths matched.
+media_folder: "src/assets/uploads"
+public_folder: "../../assets/uploads"
+
+publish_mode: simple
+locale: "en"
+
+collections:
+  - name: "events"
+    label: "Calendar Events"
+    folder: "src/content/events"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Start Time", name: "startTime", widget: "string", required: false, hint: "e.g. 6:00 PM" }
+      - { label: "End Time", name: "endTime", widget: "string", required: false, hint: "e.g. 8:00 PM" }
+      - { label: "Location", name: "location", widget: "string", required: false }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["PTA Meeting", "Fundraiser", "School Event", "Spirit Day", "Volunteer Need", "No School"]
+      - { label: "Short Description", name: "description", widget: "text", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Sign-up Link", name: "signupUrl", widget: "string", required: false }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Extra Details (optional)", name: "body", widget: "markdown", required: false }
+
+  - name: "announcements"
+    label: "News & Announcements"
+    folder: "src/content/announcements"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Pin to top of News page", name: "pinned", widget: "boolean", default: false }
+      - { label: "Mark as Urgent (shows in site-wide banner area)", name: "urgent", widget: "boolean", default: false }
+      - { label: "Short Excerpt", name: "excerpt", widget: "text", required: false }
+      - { label: "Full Story", name: "body", widget: "markdown" }
+
+  - name: "board"
+    label: "Board Members"
+    folder: "src/content/board"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role / Title", name: "role", widget: "string" }
+      - { label: "Email", name: "email", widget: "string", required: false }
+      - { label: "Photo", name: "photo", widget: "image", required: false }
+      - { label: "Display Order (lower = first)", name: "order", widget: "number", default: 99, value_type: "int" }
+
+  - name: "volunteer-opportunities"
+    label: "Volunteer Opportunities"
+    folder: "src/content/volunteer-opportunities"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { label: "Start Time", name: "startTime", widget: "string", required: false }
+      - { label: "End Time", name: "endTime", widget: "string", required: false }
+      - { label: "Spots Needed", name: "spotsNeeded", widget: "number", default: 1, value_type: "int" }
+      - { label: "Spots Filled", name: "spotsFilled", widget: "number", default: 0, value_type: "int" }
+      - { label: "Contact Name", name: "contactName", widget: "string", required: false }
+      - { label: "Contact Email", name: "contactEmail", widget: "string", required: false }
+
+  - name: "fundraisers"
+    label: "Fundraisers"
+    folder: "src/content/fundraisers"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Status", name: "status", widget: "select", options: ["active", "past"], default: "active" }
+      - { label: "Goal Amount ($)", name: "goalAmount", widget: "number", required: false }
+      - { label: "Raised Amount ($)", name: "raisedAmount", widget: "number", required: false }
+      - { label: "Start Date", name: "startDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { label: "End Date", name: "endDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { label: "Donate Link", name: "donateUrl", widget: "string", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "If Past: What the Money Funded", name: "fundedDescription", widget: "text", required: false }
+      - { label: "Extra Details (optional)", name: "body", widget: "markdown", required: false }
+
+  - name: "sponsors"
+    label: "Sponsors"
+    folder: "src/content/sponsors"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Logo", name: "logo", widget: "image", required: false }
+      - { label: "Tier", name: "tier", widget: "select", options: ["Gold", "Black & Gold", "Community"], default: "Community" }
+      - { label: "Website", name: "url", widget: "string", required: false }
+      - { label: "Display Order (lower = first)", name: "order", widget: "number", default: 99, value_type: "int" }
+
+  - name: "meetings"
+    label: "General Body Meetings"
+    folder: "src/content/meetings"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Time", name: "time", widget: "string", required: false }
+      - { label: "Location", name: "location", widget: "string", required: false }
+      - { label: "Agenda File", name: "agendaFile", widget: "file", required: false, media_folder: "/public/documents", public_folder: "/documents" }
+      - { label: "Minutes File", name: "minutesFile", widget: "file", required: false, media_folder: "/public/documents", public_folder: "/documents" }
+      - { label: "Notes (optional)", name: "body", widget: "markdown", required: false }
+
+  - name: "documents"
+    label: "Forms & Documents"
+    folder: "src/content/documents"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["Reimbursement", "Field Trip", "Budget Request", "Bylaws", "Other"]
+        default: "Other"
+      - { label: "File", name: "file", widget: "file", media_folder: "/public/documents", public_folder: "/documents" }
+      - { label: "Description", name: "description", widget: "text", required: false }
+
+  - name: "spirit-nights"
+    label: "Spirit Nights"
+    folder: "src/content/spirit-nights"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Restaurant Name", name: "restaurantName", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Details", name: "details", widget: "text", required: false }
+      - { label: "Flyer Image", name: "flyer", widget: "image", required: false }
+
+  - name: "store-items"
+    label: "Spirit Shop Items"
+    folder: "src/content/store-items"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Item Name", name: "name", widget: "string" }
+      - { label: "Price", name: "price", widget: "string", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Purchase Link", name: "url", widget: "string", required: false }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+
+  - name: "sponsorship-tiers"
+    label: "Sponsorship Tiers"
+    folder: "src/content/sponsorship-tiers"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Tier Name", name: "name", widget: "string" }
+      - { label: "Price", name: "price", widget: "string" }
+      - { label: "Cadence (optional, leave blank for a flat one-time price)", name: "cadence", widget: "string", required: false }
+      - label: "Perks"
+        name: "perks"
+        widget: "list"
+        field: { label: "Perk", name: "perk", widget: "string" }
+        default: []
+      - { label: "Highlight This Tier", name: "highlighted", widget: "boolean", default: false }
+      - { label: "Display Order (lower = first)", name: "order", widget: "number", default: 99, value_type: "int" }
+
+  - name: "pages"
+    label: "Page Text (Mission, Bylaws, Legal, etc.)"
+    folder: "src/content/pages"
+    create: false
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Content", name: "body", widget: "markdown" }
+
+  - name: "alert"
+    label: "Site-Wide Alert Banner"
+    files:
+      - label: "Alert Banner"
+        name: "current"
+        file: "src/content/alert/current.json"
+        fields:
+          - { label: "Show Banner", name: "enabled", widget: "boolean", default: false }
+          - { label: "Message", name: "message", widget: "string", default: "" }
+          - { label: "Link Text", name: "linkText", widget: "string", required: false }
+          - { label: "Link URL", name: "linkUrl", widget: "string", required: false }

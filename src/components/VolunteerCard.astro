@@ -1,0 +1,63 @@
+---
+export interface VolunteerOpportunityLike {
+  id?: string;
+  data: {
+    title: string;
+    description?: string;
+    date?: Date;
+    startTime?: string;
+    endTime?: string;
+    location?: string;
+    spotsNeeded?: number;
+    spotsFilled?: number;
+    contactName?: string;
+    contactEmail?: string;
+    signupUrl?: string;
+  };
+}
+
+interface Props {
+  opportunity: VolunteerOpportunityLike;
+}
+const { opportunity } = Astro.props;
+const { data } = opportunity;
+const hasSpotTracking = typeof data.spotsNeeded === 'number';
+const remaining = hasSpotTracking ? Math.max((data.spotsNeeded ?? 0) - (data.spotsFilled ?? 0), 0) : undefined;
+const isFull = hasSpotTracking && remaining === 0;
+const dateStr = data.date?.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+---
+
+<div class="card flex flex-col gap-3">
+  <div class="flex items-start justify-between gap-2">
+    <h3 class="font-display text-lg font-bold text-paper">{data.title}</h3>
+    {hasSpotTracking && (
+      isFull ? (
+        <span class="badge shrink-0 bg-paper/15 text-paper/70">Full</span>
+      ) : (
+        <span class="badge shrink-0 bg-gold/20 text-gold-bright">{remaining} spot{remaining === 1 ? '' : 's'} left</span>
+      )
+    )}
+  </div>
+  {(dateStr || data.startTime) && (
+    <p class="text-sm text-paper/70">
+      {dateStr} {data.startTime && `· ${data.startTime}${data.endTime ? `–${data.endTime}` : ''}`}
+    </p>
+  )}
+  {data.location && <p class="text-sm text-paper/70">📍 {data.location}</p>}
+  {data.description && <p class="text-sm text-paper/60">{data.description}</p>}
+  {data.contactName && (
+    <p class="text-xs text-paper/50">Contact: {data.contactName} {data.contactEmail && `· ${data.contactEmail}`}</p>
+  )}
+  {data.signupUrl ? (
+    <a href={data.signupUrl} target="_blank" rel="noopener" class="btn-gold mt-auto text-center">Sign Up</a>
+  ) : (
+    <button
+      type="button"
+      class:list={["volunteer-signup-btn mt-auto", isFull ? "btn-ghost cursor-not-allowed opacity-50" : "btn-gold"]}
+      data-title={data.title}
+      disabled={isFull}
+    >
+      {isFull ? 'Spots Filled' : 'Sign Up'}
+    </button>
+  )}
+</div>

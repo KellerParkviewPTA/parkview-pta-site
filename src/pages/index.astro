@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EventCard from '../components/EventCard.astro';
+import AnnouncementCard from '../components/AnnouncementCard.astro';
+import SponsorStrip from '../components/SponsorStrip.astro';
+import siteConfig from '../site.config';
+import { getCollection, getEntry, render } from 'astro:content';
+import { getUpcomingGoogleCalendarEvents } from '../utils/googleCalendar';
+import { getGoogleVolunteerOpportunities } from '../utils/googleVolunteerCalendar';
+
+const EVENTS_SHOWN = 5;
+
+const [calendarEvents, volunteerOpportunities] = await Promise.all([
+  getUpcomingGoogleCalendarEvents(EVENTS_SHOWN),
+  getGoogleVolunteerOpportunities(EVENTS_SHOWN),
+]);
+
+// Volunteer opportunities are real events too, so fold them into the same
+// upcoming-events list (tagged with the "Volunteer Need" category) rather
+// than only showing them on the Volunteer page.
+const volunteerAsEvents = volunteerOpportunities
+  .filter((o) => o.data.date)
+  .map((o) => ({
+    id: o.id,
+    source: o.source,
+    data: {
+      title: o.data.title,
+      date: o.data.date as Date,
+      startTime: o.data.startTime,
+      endTime: o.data.endTime,
+      location: o.data.location,
+      category: 'Volunteer Need',
+      description: o.data.description,
+      signupUrl: o.data.signupUrl,
+    },
+  }));
+
+const events = [...calendarEvents, ...volunteerAsEvents]
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
+  .slice(0, EVENTS_SHOWN);
+
+const announcements = (await getCollection('announcements'))
+  .sort((a, b) => (b.data.pinned ? 1 : 0) - (a.data.pinned ? 1 : 0) || b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const missionEntry = await getEntry('pages', 'mission');
+const { Content: MissionContent } = missionEntry ? await render(missionEntry) : { Content: null };
+---
+
+<Layout title={siteConfig.ptaName}>
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-ink">
+    <img
+      src="/images/parkview-outside.jpg"
+      alt="The front of Parkview Elementary school"
+      class="absolute inset-0 h-full w-full object-cover opacity-70"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/30"></div>
+    <div class="pointer-events-none absolute top-16 left-10 h-24 w-24 animate-sparkle text-gold-bright">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.2 7.8L22 10l-7.8 2.2L12 20l-2.2-7.8L2 10l7.8-2.2z"/></svg>
+    </div>
+    <div class="relative mx-auto flex min-h-[85vh] max-w-5xl flex-col items-center justify-center px-5 py-24 text-center sm:py-32">
+      <p class="fade-up badge mb-5">{siteConfig.district} · {siteConfig.city}</p>
+      <h1 class="fade-up font-display text-5xl font-bold text-paper drop-shadow-lg sm:text-6xl lg:text-7xl">
+        {siteConfig.ptaName}
+      </h1>
+      <p class="fade-up mt-5 max-w-xl text-lg text-paper/90 sm:text-xl">{siteConfig.tagline}</p>
+      <div class="fade-up mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+        <a href="/join" class="btn-gold">Join the PTA</a>
+        <a href="/sponsorship" class="btn-outline !border-paper !text-paper hover:!bg-paper hover:!text-ink">Become a Sponsor</a>
+        <a href="/volunteer" class="btn-ghost !bg-paper/10 !text-paper hover:!bg-paper/20">Volunteer</a>
+        <a href={siteConfig.links.storeUrl} class="btn-ghost !bg-paper/10 !text-paper hover:!bg-paper/20">Shop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPCOMING EVENTS -->
+  <section class="section">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h2 class="font-display text-3xl font-bold text-paper sm:text-4xl">Upcoming Events</h2>
+        <p class="mt-2 text-paper/60">Here's what's coming up at Parkview.</p>
+      </div>
+      <a href="/calendar" class="btn-outline !min-h-11 !px-5 !py-2.5 !text-sm">View Full Calendar</a>
+    </div>
+    {
+      events.length > 0 ? (
+        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((event) => <EventCard event={event} />)}
+        </div>
+      ) : (
+        <p class="mt-8 text-paper/60">No upcoming events yet. Check back soon!</p>
+      )
+    }
+  </section>
+
+  <!-- NEWS -->
+  <section class="section">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h2 class="font-display text-3xl font-bold text-paper sm:text-4xl">Latest News</h2>
+        <p class="mt-2 text-paper/60">Announcements from your PTA board.</p>
+      </div>
+      <a href="/news" class="btn-outline !min-h-11 !px-5 !py-2.5 !text-sm">All Announcements</a>
+    </div>
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {announcements.map((a) => <AnnouncementCard announcement={a} />)}
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section class="bg-paper py-16 text-ink sm:py-24">
+    <div class="section !py-0">
+      <div class="reading-panel mx-auto max-w-3xl text-center">
+        <p class="badge mb-4 bg-ink/5 text-ink/70">Our Mission</p>
+        {MissionContent && <MissionContent />}
+      </div>
+    </div>
+  </section>
+
+  <!-- SPONSORS -->
+  <section class="section">
+    <h2 class="text-center font-display text-2xl font-bold text-paper">Thank You to Our Sponsors</h2>
+    <div class="mt-8">
+      <SponsorStrip />
+    </div>
+    <p class="mt-6 text-center">
+      <a href="/sponsorship" class="font-bold text-gold-bright hover:underline">Become a sponsor →</a>
+    </p>
+  </section>
+</Layout>

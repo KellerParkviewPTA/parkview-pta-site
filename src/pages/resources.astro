@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import siteConfig from '../site.config';
+
+const links = [
+  { title: 'Keller ISD Homepage', description: 'District news, policies, and contact info.', href: siteConfig.links.kellerISDHomepage, icon: '🏫' },
+  { title: 'Parkview Elementary Website', description: "The school's official website.", href: siteConfig.links.schoolWebsite, icon: '🐾' },
+  { title: 'Lunch Menu', description: "This month's cafeteria menu.", href: siteConfig.links.lunchMenuUrl, icon: '🍎' },
+  { title: 'Transportation', description: 'Bus routes and transportation info.', href: siteConfig.links.transportationUrl, icon: '🚌' },
+  { title: 'Parent Portal', description: 'Grades, attendance, and district communications.', href: siteConfig.links.parentPortalUrl, icon: '🔑' },
+  { title: 'Keller ISD School Calendar (PDF)', description: 'The official district calendar.', href: siteConfig.links.kellerISDCalendarPdfUrl, icon: '📅' },
+];
+---
+
+<Layout title="Parent Resources" description="Helpful links for Parkview Elementary families.">
+  <PageHero eyebrow="Helpful Links" title="Parent Resources" subtitle="Everything you need from the district and school, in one place." />
+
+  <section class="section !pt-0">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        links.map((l) => (
+          <a href={l.href} target="_blank" rel="noopener" class="card flex flex-col gap-2">
+            <span class="text-3xl">{l.icon}</span>
+            <h3 class="font-display text-lg font-bold text-paper">{l.title}</h3>
+            <p class="text-sm text-paper/60">{l.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

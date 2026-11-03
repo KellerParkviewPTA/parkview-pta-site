@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('pages', 'accessibility');
+const { Content } = entry ? await render(entry) : { Content: null };
+---
+
+<Layout title="Accessibility Statement">
+  <PageHero eyebrow="Legal" title="Accessibility Statement" />
+  <section class="section !pt-0">
+    <div class="reading-panel prose prose-headings:font-display mx-auto max-w-2xl">
+      {Content && <Content />}
+    </div>
+  </section>
+</Layout>

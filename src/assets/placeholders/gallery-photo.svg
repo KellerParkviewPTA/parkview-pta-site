@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Placeholder gallery photo">
+  <rect width="400" height="300" fill="#17171A"/>
+  <circle cx="300" cy="80" r="30" fill="#D4AF37"/>
+  <path d="M0 240 L130 140 L220 210 L280 160 L400 260 L400 300 L0 300 Z" fill="#FFC72C" opacity="0.85"/>
+  <rect x="0" y="0" width="400" height="300" fill="none" stroke="#D4AF37" stroke-width="3" opacity="0.4"/>
+  <text x="200" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#F7F5EF" opacity="0.6">TODO: replace via /admin photo gallery</text>
+</svg>

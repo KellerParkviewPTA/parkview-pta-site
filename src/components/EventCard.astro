@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import eventDefault from '../assets/placeholders/event-default.svg';
+import { eventDateRange, googleCalendarUrl, CATEGORY_STYLES } from '../utils/calendar';
+
+export interface EventLike {
+  id: string;
+  collection?: string;
+  data: {
+    title: string;
+    date: Date;
+    startTime?: string;
+    endTime?: string;
+    location?: string;
+    category: string;
+    description?: string;
+    image?: CollectionEntry<'events'>['data']['image'];
+    signupUrl?: string;
+  };
+}
+
+interface Props {
+  event: EventLike;
+}
+
+const { event } = Astro.props;
+const { data } = event;
+const style = CATEGORY_STYLES[data.category] ?? CATEGORY_STYLES['School Event'];
+const { start, end } = eventDateRange(data.date, data.startTime, data.endTime);
+const gcalUrl = googleCalendarUrl({
+  title: data.title,
+  description: data.description,
+  location: data.location,
+  start,
+  end,
+});
+const canDownloadIcs = event.collection === 'events';
+
+const month = data.date.toLocaleDateString('en-US', { month: 'short' });
+const day = data.date.toLocaleDateString('en-US', { day: 'numeric' });
+---
+
+<article class="card flex flex-col overflow-hidden !p-0">
+  <div class="relative h-40 w-full overflow-hidden bg-ink-softer">
+    {data.image ? (
+      <Image src={data.image} alt={data.title} width={400} height={240} class="h-full w-full object-cover" />
+    ) : (
+      <Image src={eventDefault} alt="" width={400} height={240} class="h-full w-full object-cover opacity-80" />
+    )}
+    <div class="absolute top-3 left-3 rounded-xl bg-ink/90 px-3 py-1.5 text-center leading-none shadow-lg">
+      <p class="text-[10px] font-bold tracking-wide text-gold-bright uppercase">{month}</p>
+      <p class="font-display text-lg font-bold text-paper">{day}</p>
+    </div>
+  </div>
+  <div class="flex flex-1 flex-col gap-3 p-5">
+    <span class={`badge w-fit ${style.bg} ${style.text}`}>
+      <span class={`h-1.5 w-1.5 rounded-full ${style.dot}`}></span>
+      {data.category}
+    </span>
+    <h3 class="font-display text-lg font-bold text-paper">{data.title}</h3>
+    <p class="text-sm text-paper/70">
+      {data.startTime && <span>{data.startTime}{data.endTime ? `–${data.endTime}` : ''} · </span>}
+      {data.location}
+    </p>
+    {data.description && <p class="line-clamp-2 text-sm text-paper/60">{data.description}</p>}
+    <div class="mt-auto flex flex-wrap gap-2 pt-2">
+      {data.signupUrl && (
+        <a href={data.signupUrl} class="btn-outline !min-h-10 !px-4 !py-2 !text-xs">Sign Up</a>
+      )}
+      <div class="group relative">
+        <button class="btn-ghost !min-h-10 !px-4 !py-2 !text-xs" aria-haspopup="true">+ Add to Calendar</button>
+        <div class="invisible absolute bottom-full left-0 z-20 mb-1 w-48 rounded-xl border border-gold/20 bg-ink-soft p-1 opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <a href={gcalUrl} target="_blank" rel="noopener" class="block rounded-lg px-3 py-2 text-xs font-medium text-paper/90 hover:bg-gold/10">Google Calendar</a>
+          {canDownloadIcs && (
+            <a href={`/ics/${event.id}.ics`} class="block rounded-lg px-3 py-2 text-xs font-medium text-paper/90 hover:bg-gold/10">Apple / Outlook (.ics)</a>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

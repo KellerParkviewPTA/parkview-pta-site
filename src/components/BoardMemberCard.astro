@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import avatarDefault from '../assets/placeholders/avatar.svg';
+
+interface Props {
+  member: CollectionEntry<'board'>;
+}
+const { member } = Astro.props;
+const { data } = member;
+---
+
+<div class="card flex flex-col items-center p-6 text-center">
+  <Image
+    src={data.photo ?? avatarDefault}
+    alt={`Photo of ${data.name}`}
+    width={140}
+    height={140}
+    class="mb-4 h-28 w-28 rounded-full border-4 border-gold/30 object-cover"
+  />
+  <h3 class="font-display text-lg font-bold text-paper">{data.name}</h3>
+  <p class="text-sm font-semibold text-gold-bright">{data.role}</p>
+  {data.email && (
+    <a href={`mailto:${data.email}`} class="mt-2 text-sm text-paper/60 hover:text-gold-bright break-all">
+      {data.email}
+    </a>
+  )}
+</div>

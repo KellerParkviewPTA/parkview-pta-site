@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import siteConfig from '../site.config';
+
+// Overlay the Volunteer Opportunities calendar on top of the main calendar
+// embed, if one has been configured (see site.config.ts for setup steps).
+const calendarEmbedSrc = siteConfig.links.volunteerCalendarEmbedSrc
+  ? `${siteConfig.links.googleCalendarEmbedUrl}&src=${encodeURIComponent(siteConfig.links.volunteerCalendarEmbedSrc)}`
+  : siteConfig.links.googleCalendarEmbedUrl;
+---
+
+<Layout title="Calendar" description="The full Parkview Elementary PTA events calendar.">
+  <PageHero eyebrow="Calendar" title="PTA Calendar" subtitle="See every PTA event below, or subscribe to get them synced straight to your phone." />
+
+  <section class="section !pt-0">
+    <div class="reading-panel mx-auto max-w-4xl">
+      {siteConfig.links.googleCalendarEmbedUrl ? (
+        <div class="overflow-hidden rounded-2xl border border-ink/10">
+          <iframe
+            src={calendarEmbedSrc}
+            width="100%"
+            height="600"
+            loading="lazy"
+            title="Embedded PTA Google Calendar"
+          ></iframe>
+        </div>
+      ) : (
+        <p class="text-center text-sm text-ink/50">TODO: Add your Google Calendar embed link in site.config.ts.</p>
+      )}
+
+      <div class="mt-6 flex flex-wrap justify-center gap-3 text-center">
+        {siteConfig.links.googleCalendarSubscribeUrl ? (
+          <a href={siteConfig.links.googleCalendarSubscribeUrl} class="btn-gold">Subscribe to Google Calendar</a>
+        ) : (
+          <p class="w-full text-sm text-ink/50">TODO: Add your Google Calendar subscribe link in site.config.ts.</p>
+        )}
+        <a href={siteConfig.links.kellerISDCalendarUrl} target="_blank" rel="noopener" class="btn-outline">
+          Keller ISD District Calendar
+        </a>
+        <a href={siteConfig.links.kellerISDCalendarPdfUrl} target="_blank" rel="noopener" class="btn-outline">
+          Printable Calendar (PDF)
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

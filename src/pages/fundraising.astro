@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import FundraiserCard from '../components/FundraiserCard.astro';
+import SponsorStrip from '../components/SponsorStrip.astro';
+import SponsorForm from '../components/forms/SponsorForm.astro';
+import { getCollection } from 'astro:content';
+
+const fundraisers = await getCollection('fundraisers');
+const active = fundraisers.filter((f) => f.data.status === 'active');
+const past = fundraisers.filter((f) => f.data.status === 'past');
+---
+
+<Layout title="Fundraising" description="Current and past Parkview Elementary PTA fundraisers.">
+  <PageHero eyebrow="Fundraising" title="Fundraising" subtitle="See where the money goes and how you can help." />
+
+  <section class="section !pt-0">
+    <h2 class="mb-8 text-center font-display text-3xl font-bold text-paper">Active Fundraisers</h2>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {active.map((f) => <FundraiserCard fundraiser={f} />)}
+    </div>
+  </section>
+
+  {
+    past.length > 0 && (
+      <section class="section !pt-0">
+        <h2 class="mb-8 text-center font-display text-3xl font-bold text-paper">Past Results</h2>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {past.map((f) => <FundraiserCard fundraiser={f} />)}
+        </div>
+      </section>
+    )
+  }
+
+  <section id="sponsors" class="section !pt-0 scroll-mt-24">
+    <h2 class="mb-8 text-center font-display text-3xl font-bold text-paper">Our Business Partners</h2>
+    <SponsorStrip />
+    <div class="reading-panel mx-auto mt-10 max-w-2xl">
+      <h3 class="mb-2 text-center font-display text-xl font-bold">Become a Sponsor</h3>
+      <p class="mb-6 text-center text-ink/70">Partner with Parkview PTA and get your business in front of hundreds of local families.</p>
+      <SponsorForm />
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import VolunteerCard from '../components/VolunteerCard.astro';
+import VolunteerSignupModal from '../components/VolunteerSignupModal.astro';
+import VolunteerInterestForm from '../components/forms/VolunteerInterestForm.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import { getGoogleVolunteerOpportunities } from '../utils/googleVolunteerCalendar';
+
+const localOpportunities = await getCollection('volunteer-opportunities');
+const googleOpportunities = await getGoogleVolunteerOpportunities();
+const opportunities = [...localOpportunities, ...googleOpportunities].sort((a, b) => {
+  const aTime = a.data.date?.valueOf() ?? Infinity;
+  const bTime = b.data.date?.valueOf() ?? Infinity;
+  return aTime - bTime;
+});
+const volunteerInfo = await getEntry('pages', 'volunteer-info');
+const { Content: VolunteerInfoContent } = volunteerInfo ? await render(volunteerInfo) : { Content: null };
+---
+
+<Layout title="Volunteer" description="Find a volunteer opportunity that fits your schedule at Parkview Elementary.">
+  <PageHero eyebrow="Get Involved" title="Volunteer" subtitle="Volunteer when it works for your schedule. Every little bit helps!" />
+
+  <section class="section !pt-0">
+    <h2 class="mb-8 text-center font-display text-3xl font-bold text-paper">Current Opportunities</h2>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {opportunities.map((o) => <VolunteerCard opportunity={o} />)}
+    </div>
+    <VolunteerSignupModal />
+  </section>
+
+  <section class="section !pt-0">
+    <div class="reading-panel mx-auto max-w-2xl">
+      <h2 class="mb-2 text-center font-display text-2xl font-bold">General Volunteer Interest</h2>
+      <p class="mb-6 text-center text-ink/70">Not sure what fits yet? Tell us a bit about yourself and we'll match you up.</p>
+      <VolunteerInterestForm />
+    </div>
+  </section>
+
+  <section class="section !pt-0">
+    <div class="reading-panel mx-auto max-w-3xl">
+      {VolunteerInfoContent && <VolunteerInfoContent />}
+    </div>
+  </section>
+</Layout>

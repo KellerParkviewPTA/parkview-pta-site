@@ -1,0 +1,110 @@
+<button
+  id="search-open"
+  type="button"
+  class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-gold/40 text-gold transition hover:border-gold hover:bg-gold/10 dark:text-gold-bright"
+  aria-label="Search the site"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
+    <circle cx="11" cy="11" r="7"></circle>
+    <path d="m21 21-4.3-4.3"></path>
+  </svg>
+</button>
+
+<div
+  id="search-modal"
+  class="fixed inset-0 z-100 hidden items-start justify-center bg-ink/80 p-4 pt-24 backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site search"
+>
+  <div class="w-full max-w-xl rounded-3xl border border-gold/30 bg-ink-soft p-5 shadow-2xl">
+    <div class="flex items-center gap-3">
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Search events, news, forms..."
+        class="w-full rounded-full border-2 border-gold/30 bg-ink px-5 py-3 text-paper placeholder:text-paper/50 focus:border-gold"
+      />
+      <button id="search-close" type="button" class="btn-ghost !min-h-11 !px-4 !py-2" aria-label="Close search">
+        Close
+      </button>
+    </div>
+    <ul id="search-results" class="mt-4 max-h-80 space-y-1 overflow-y-auto"></ul>
+    <p id="search-empty" class="mt-4 text-sm text-paper/60">Start typing to search the whole site.</p>
+  </div>
+</div>
+
+<script>
+  type SearchItem = { title: string; section: string; url: string };
+
+  const openBtn = document.getElementById('search-open');
+  const closeBtn = document.getElementById('search-close');
+  const modal = document.getElementById('search-modal');
+  const input = document.getElementById('search-input') as HTMLInputElement | null;
+  const results = document.getElementById('search-results');
+  const empty = document.getElementById('search-empty');
+
+  let index: SearchItem[] | null = null;
+
+  async function loadIndex() {
+    if (index) return index;
+    const res = await fetch('/search-index.json');
+    index = (await res.json()) as SearchItem[];
+    return index;
+  }
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+    modal?.classList.add('flex');
+    input?.focus();
+    loadIndex();
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+    modal?.classList.remove('flex');
+    if (input) input.value = '';
+    if (results) results.innerHTML = '';
+    empty?.classList.remove('hidden');
+  }
+
+  openBtn?.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      openModal();
+    }
+  });
+
+  input?.addEventListener('input', async () => {
+    const q = input.value.trim().toLowerCase();
+    if (!results) return;
+    if (!q) {
+      results.innerHTML = '';
+      empty?.classList.remove('hidden');
+      return;
+    }
+    empty?.classList.add('hidden');
+    const items = await loadIndex();
+    const matches = items.filter((i) => i.title.toLowerCase().includes(q)).slice(0, 10);
+    results.innerHTML = matches
+      .map(
+        (m) => `
+      <li>
+        <a href="${m.url}" class="flex items-center justify-between rounded-xl px-4 py-3 hover:bg-gold/10">
+          <span class="font-medium text-paper">${m.title}</span>
+          <span class="badge">${m.section}</span>
+        </a>
+      </li>`
+      )
+      .join('');
+    if (!matches.length) {
+      results.innerHTML = `<li class="px-4 py-3 text-paper/60">No matches. Try another word.</li>`;
+    }
+  });
+</script>

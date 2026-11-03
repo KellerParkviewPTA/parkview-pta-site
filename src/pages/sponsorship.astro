@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import siteConfig from '../site.config';
+import { getCollection } from 'astro:content';
+
+const tiers = (await getCollection('sponsorship-tiers')).sort((a, b) => a.data.order - b.data.order);
+const donationUrl = siteConfig.links.sponsorshipDonationUrl;
+---
+
+<Layout title="Sponsorship" description="Become a sponsor of the Parkview Elementary PTA.">
+  <PageHero eyebrow="Sponsorship" title="Become a Sponsor" subtitle="Support Parkview PTA programs at the level that works for you." />
+
+  <section class="section !pt-0">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        tiers.map((tier) => (
+          <div class={`card flex flex-col ${tier.data.highlighted ? 'ring-2 ring-gold-bright' : ''}`}>
+            {tier.data.highlighted && <span class="badge mb-3 w-fit">Most Popular</span>}
+            <h3 class="font-display text-xl font-bold text-paper">{tier.data.name}</h3>
+            <p class="mt-1 text-3xl font-bold text-gold-bright">{tier.data.price}</p>
+            <ul class="mt-4 flex-1 space-y-2 text-sm text-paper/70">
+              {tier.data.perks.map((perk) => (
+                <li class="flex items-start gap-2">
+                  <span class="text-gold-bright">✓</span> {perk}
+                </li>
+              ))}
+            </ul>
+            {donationUrl ? (
+              <a href={donationUrl} target="_blank" rel="noopener" class="btn-gold mt-5 w-full">
+                Become a Sponsor
+              </a>
+            ) : (
+              <p class="mt-5 text-xs text-paper/50">TODO: Add your sponsorship donation link in site.config.ts.</p>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

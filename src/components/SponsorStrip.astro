@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import sponsorDefault from '../assets/placeholders/sponsor-logo.svg';
+
+const sponsors = (await getCollection('sponsors')).sort((a, b) => a.data.order - b.data.order);
+---
+
+{
+  sponsors.length > 0 && (
+    <div class="flex flex-wrap items-center justify-center gap-6">
+      {sponsors.map((s) => (
+        <a
+          href={s.data.url || '#'}
+          class="flex w-40 flex-col items-center justify-center gap-1 rounded-2xl bg-paper p-3 shadow-md transition hover:scale-105"
+          aria-label={s.data.name}
+        >
+          <Image src={s.data.logo ?? sponsorDefault} alt={s.data.name} width={140} height={70} class="max-h-14 w-auto object-contain" />
+          {!s.data.logo && <span class="text-center text-xs font-bold text-ink">{s.data.name}</span>}
+        </a>
+      ))}
+    </div>
+  )
+}

@@ -1,0 +1,30 @@
+<form name="sponsor" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/thank-you?form=sponsor" class="grid gap-4">
+  <input type="hidden" name="form-name" value="sponsor" />
+  <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid gap-1">
+      <label for="s-business" class="text-sm font-semibold">Business name</label>
+      <input id="s-business" name="business_name" type="text" required class="min-h-12 rounded-xl border-2 border-ink/15 px-4" />
+    </div>
+    <div class="grid gap-1">
+      <label for="s-contact" class="text-sm font-semibold">Contact name</label>
+      <input id="s-contact" name="contact_name" type="text" required class="min-h-12 rounded-xl border-2 border-ink/15 px-4" />
+    </div>
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid gap-1">
+      <label for="s-email" class="text-sm font-semibold">Email</label>
+      <input id="s-email" name="email" type="email" required class="min-h-12 rounded-xl border-2 border-ink/15 px-4" />
+    </div>
+    <div class="grid gap-1">
+      <label for="s-phone" class="text-sm font-semibold">Phone</label>
+      <input id="s-phone" name="phone" type="tel" class="min-h-12 rounded-xl border-2 border-ink/15 px-4" />
+    </div>
+  </div>
+  <div class="grid gap-1">
+    <label for="s-notes" class="text-sm font-semibold">Tell us about your interest</label>
+    <textarea id="s-notes" name="notes" rows="4" class="rounded-xl border-2 border-ink/15 px-4 py-3"></textarea>
+  </div>
+  <button type="submit" class="btn-gold w-full sm:w-fit">Become a Sponsor</button>
+</form>

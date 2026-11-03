@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150" width="300" height="150" role="img" aria-label="Placeholder sponsor logo">
+  <rect width="300" height="150" rx="12" fill="#F7F5EF"/>
+  <rect x="2" y="2" width="296" height="146" rx="10" fill="none" stroke="#D4AF37" stroke-width="3" stroke-dasharray="6 6"/>
+  <text x="150" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#0B0B0C">Your Logo Here</text>
+</svg>

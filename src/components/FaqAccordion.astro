@@ -1,0 +1,20 @@
+---
+interface Props {
+  items: { question: string; answer: string }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="divide-y divide-gold/15 reading-panel !p-0">
+  {
+    items.map((item, i) => (
+      <details class="group p-5 sm:p-6" {...(i === 0 ? { open: true } : {})}>
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-base font-bold text-ink marker:content-none">
+          {item.question}
+          <span class="shrink-0 text-xl text-gold transition group-open:rotate-45">+</span>
+        </summary>
+        <p class="mt-3 text-sm text-ink/70 sm:text-base">{item.answer}</p>
+      </details>
+    ))
+  }
+</div>

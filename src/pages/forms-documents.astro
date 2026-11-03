@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { getCollection } from 'astro:content';
+
+const documents = await getCollection('documents');
+const categories = ['Reimbursement', 'Field Trip', 'Budget Request', 'Bylaws', 'Other'] as const;
+---
+
+<Layout title="Forms & Documents" description="Downloadable PTA forms and documents.">
+  <PageHero eyebrow="Resources" title="Forms & Documents" subtitle="Everything you need, ready to download." />
+
+  <section class="section !pt-0">
+    <div class="reading-panel mx-auto max-w-3xl">
+      {
+        categories.map((cat) => {
+          const docs = documents.filter((d) => d.data.category === cat);
+          if (docs.length === 0) return null;
+          return (
+            <div class="mb-8 last:mb-0">
+              <h2 class="mb-3 font-display text-xl font-bold">{cat}</h2>
+              <div class="divide-y divide-ink/10">
+                {docs.map((d) => (
+                  <div class="flex flex-wrap items-center justify-between gap-3 py-3">
+                    <div>
+                      <p class="font-semibold text-ink">{d.data.title}</p>
+                      {d.data.description && <p class="text-sm text-ink/60">{d.data.description}</p>}
+                    </div>
+                    <a href={d.data.file} download class="btn-outline !min-h-9 !border-ink/20 !px-4 !py-1.5 !text-xs !text-ink hover:!bg-ink hover:!text-paper">
+                      Download
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </section>
+</Layout>

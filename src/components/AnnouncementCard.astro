@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  announcement: CollectionEntry<'announcements'>;
+}
+const { announcement } = Astro.props;
+const { data } = announcement;
+const dateStr = data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+---
+
+<a href={`/news/${announcement.id}`} class="card flex flex-col gap-2">
+  <div class="flex flex-wrap items-center gap-2">
+    {data.pinned && <span class="badge bg-gold/20 text-gold-bright">📌 Pinned</span>}
+    {data.urgent && <span class="badge bg-red-500/20 text-red-300">Urgent</span>}
+    <time class="text-xs font-medium text-paper/50">{dateStr}</time>
+  </div>
+  <h3 class="font-display text-lg font-bold text-paper">{data.title}</h3>
+  {data.excerpt && <p class="line-clamp-2 text-sm text-paper/60">{data.excerpt}</p>}
+  <span class="mt-1 text-sm font-bold text-gold-bright">Read more →</span>
+</a>
