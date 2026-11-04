@@ -111,16 +111,6 @@ const meetings = defineCollection({
   }),
 });
 
-const documents = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/documents' }),
-  schema: z.object({
-    title: z.string(),
-    category: z.enum(['Reimbursement', 'Field Trip', 'Budget Request', 'Bylaws', 'Other']).default('Other'),
-    file: z.string(), // path under /public/documents/
-    description: z.string().optional(),
-  }),
-});
-
 const spiritNights = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/spirit-nights' }),
   schema: ({ image }) =>
@@ -203,7 +193,6 @@ export const collections = {
   fundraisers,
   sponsors,
   meetings,
-  documents,
   'spirit-nights': spiritNights,
   'store-items': storeItems,
   'sponsorship-tiers': sponsorshipTiers,

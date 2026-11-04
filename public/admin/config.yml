@@ -128,21 +128,6 @@ collections:
       - { label: "Minutes File", name: "minutesFile", widget: "file", required: false, media_folder: "/public/documents", public_folder: "/documents" }
       - { label: "Notes (optional)", name: "body", widget: "markdown", required: false }
 
-  - name: "documents"
-    label: "Forms & Documents"
-    folder: "src/content/documents"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        options: ["Reimbursement", "Field Trip", "Budget Request", "Bylaws", "Other"]
-        default: "Other"
-      - { label: "File", name: "file", widget: "file", media_folder: "/public/documents", public_folder: "/documents" }
-      - { label: "Description", name: "description", widget: "text", required: false }
-
   - name: "spirit-nights"
     label: "Spirit Nights"
     folder: "src/content/spirit-nights"

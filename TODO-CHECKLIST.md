@@ -46,7 +46,7 @@ Everything below is placeholder content marked `TODO` in the code so the site bu
 ## 8. Legal / long-form pages (`/admin` → Page Text)
 - [ ] Mission statement — replace with your PTA's real mission
 - [ ] About/history story — replace with your PTA's real history
-- [ ] Bylaws — upload your official bylaws PDF via Forms & Documents and link it, or paste the full text
+- [ ] Bylaws — paste the full bylaws text into Page Text → Bylaws, or upload the PDF as a file asset and link to it there
 - [ ] Privacy Policy — have your board (and legal counsel, if possible) review before publishing
 - [ ] Accessibility Statement — review and customize
 - [ ] Volunteer info page — add the current Keller ISD background-check policy/instructions, and explain how (or whether) volunteer hours are tracked

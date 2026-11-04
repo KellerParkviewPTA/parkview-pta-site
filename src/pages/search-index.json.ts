@@ -4,12 +4,11 @@ import { getCollection } from 'astro:content';
 export const prerender = true;
 
 export const GET: APIRoute = async () => {
-  const [events, announcements, board, volunteerOpportunities, documents, pages] = await Promise.all([
+  const [events, announcements, board, volunteerOpportunities, pages] = await Promise.all([
     getCollection('events'),
     getCollection('announcements'),
     getCollection('board'),
     getCollection('volunteer-opportunities'),
-    getCollection('documents'),
     getCollection('pages'),
   ]);
 
@@ -18,7 +17,6 @@ export const GET: APIRoute = async () => {
     ...announcements.map((a) => ({ title: a.data.title, section: 'News', url: `/news/${a.id}` })),
     ...board.map((b) => ({ title: `${b.data.name} (${b.data.role})`, section: 'Board', url: '/about' })),
     ...volunteerOpportunities.map((v) => ({ title: v.data.title, section: 'Volunteer', url: '/volunteer' })),
-    ...documents.map((d) => ({ title: d.data.title, section: 'Forms & Documents', url: '/forms-documents' })),
     ...pages
       .filter((p) => ['privacy-policy', 'accessibility'].includes(p.id))
       .map((p) => ({ title: p.data.title, section: 'Page', url: `/${p.id}` })),
