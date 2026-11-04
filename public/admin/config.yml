@@ -3,13 +3,18 @@
 # collection schema there, add the matching widget here too.
 #
 # BACKEND SETUP (one-time, see README.md for full steps):
-#  1. Enable "Identity" and "Git Gateway" in your Netlify site dashboard
-#     (Site configuration -> Identity -> Enable Identity, then
-#     Identity -> Services -> Git Gateway -> Enable Git Gateway).
-#  2. Invite yourself as a user under Identity -> Invite users.
-#  3. Visit https://YOUR-SITE.netlify.app/admin and log in with that invite.
+#  Netlify Identity + Git Gateway are deprecated, so this uses Netlify's
+#  GitHub OAuth proxy instead:
+#  1. On GitHub: Settings -> Developer settings -> OAuth Apps -> New OAuth App.
+#     Authorization callback URL: https://api.netlify.com/auth/done
+#  2. On Netlify: Site configuration -> Access control -> OAuth ->
+#     Install provider -> GitHub. Paste the Client ID and Client Secret
+#     from the GitHub OAuth App you just created.
+#  3. Visit https://YOUR-SITE.netlify.app/admin and log in with "Login with GitHub".
+#     Your GitHub account needs write access to this repo.
 backend:
-  name: git-gateway
+  name: github
+  repo: KellerParkviewPTA/parkview-pta-site
   branch: main
 
 # Images you upload in the admin panel are saved here so Astro's image

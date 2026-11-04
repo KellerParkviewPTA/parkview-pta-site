@@ -50,13 +50,16 @@ If you just want to deploy the site, skip to **Section 3**. If you want to previ
 
 The admin panel at `/admin` is how you'll edit everything day-to-day — events, news, board members, photos, etc. — through simple forms, no code.
 
-1. In your Netlify site dashboard, go to **Site configuration → Identity** and click **Enable Identity**.
-2. Go to **Identity → Services** and click **Enable Git Gateway**. (This lets the admin panel save your changes back to the website automatically.)
-3. Go to **Identity → Invite users**, and invite yourself (and any other board members who should be able to edit the site) by email.
-4. Check your email, click the invite link, and set a password.
-5. Visit `https://YOUR-SITE.netlify.app/admin` and log in.
+Netlify Identity and Git Gateway (the old way to do this) are deprecated, so logins work through GitHub directly instead:
 
-That's it — from now on, anyone you've invited can log in at `/admin` and edit the site.
+1. On GitHub, go to **Settings → Developer settings → OAuth Apps → New OAuth App**.
+   - Homepage URL: your site's URL (e.g. `https://YOUR-SITE.netlify.app`)
+   - Authorization callback URL: `https://api.netlify.com/auth/done`
+2. After creating it, copy the **Client ID**, then generate and copy a **Client Secret**.
+3. In your Netlify site dashboard, go to **Site configuration → Access control → OAuth → Install provider → GitHub**, and paste in that Client ID and Client Secret.
+4. Visit `https://YOUR-SITE.netlify.app/admin` and click **Login with GitHub**.
+
+Anyone who needs to edit the site must be a **collaborator on the GitHub repo** (Settings → Collaborators on GitHub) — that's what controls who can log in now, instead of an Identity invite list. Give board members "Write" access, not "Admin," unless they also need to manage repo settings.
 
 ---
 
