@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { getCollection } from 'astro:content';
+
+const wishlists = (await getCollection('teacher-wishlists')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Support Your Teacher" description="Teacher wish lists by grade for Parkview Elementary.">
+  <PageHero
+    eyebrow="Support Your Teacher"
+    title="Teacher Wish Lists"
+    subtitle="Every grade's teacher has a wish list of classroom supplies — grab an item or two when you can!"
+  />
+
+  <section class="section !pt-0">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        wishlists.map((w) => (
+          <div class="card flex flex-col gap-3">
+            <p class="badge w-fit">{w.data.grade}</p>
+            {w.data.teacherName && <h3 class="font-display text-lg font-bold text-paper">{w.data.teacherName}</h3>}
+            {w.data.notes && <p class="text-sm text-paper/60">{w.data.notes}</p>}
+            {w.data.wishlistUrl ? (
+              <a href={w.data.wishlistUrl} target="_blank" rel="noopener" class="btn-gold mt-auto">
+                View Wish List
+              </a>
+            ) : (
+              <p class="mt-auto text-xs text-paper/50">TODO: Add this teacher's wish list link in /admin.</p>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

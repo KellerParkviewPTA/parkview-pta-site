@@ -9,7 +9,7 @@ Everything below is placeholder content marked `TODO` in the code so the site bu
 - [x] Real street address added and corrected to match the school's own website: 6900 Bayberry Dr, **Fort Worth, TX 76137** (not Keller as originally guessed)
 - [x] Real contact email and phone number added
 - [x] Form submissions set to go to `kellerparkviewpta@gmail.com`
-- [ ] Spirit Shop / store link
+- [x] Spirit Shop / store link added (`https://www.aledobrandingco.com/sr/4629883`)
 - [x] Google Calendar embed URL and "Subscribe" (ICS) URL added — the `/calendar` page now shows the live Google Calendar front and center (the old custom month/list calendar widget was removed in favor of it)
 - [x] Keller ISD district calendar page + printable instructional-calendar PDF linked
 - [x] School website, lunch menu, transportation info, and parent portal links — all pulled from pes.kellerisd.net
@@ -55,14 +55,30 @@ Everything below is placeholder content marked `TODO` in the code so the site bu
 - [ ] Leave "Show Banner" off until you have a real urgent message to display
 
 ## 13a. Join the PTA (`/join`)
-- [x] "Join the PTA Now" button added, linking straight to the official Texas PTA membership portal (`https://txpta.my.salesforce-sites.com/JoinPTA`)
+- [x] "Join the PTA Now" button added, linking to the official PTA membership portal (`https://www.joinpta.org`)
 - [x] Removed the local membership tiers/form — membership signup and payment now happen entirely on the Texas PTA site, not on this site
 
 ## 13b. Sponsorship (`/admin` → Sponsorship Tiers, page at `/sponsorship`)
 - [x] Moved the 5 dollar tiers from your flyer onto their own Sponsorship page: Panther Friend ($50), Bronze Sponsor ($150), Silver Sponsor ($250), Gold Sponsor ($500), Platinum Sponsor ($1000)
 - [x] Removed the $11 Regular Member tier (that's now just "Join the PTA," see above)
-- [x] Sponsorship payment link added: `links.sponsorshipDonationUrl` now points to your Zeffy page (`https://www.zeffy.com/en-US/ticketing/parkview-elementary-pta-sponsorships`)
+- [x] Sponsorship/donation link added: `links.sponsorshipDonationUrl` now points to your Zeffy donation form (`https://www.zeffy.com/en-US/donation-form/parkview-pta-sponsorships`)
 - [x] The 5 tiers on `/sponsorship` were renamed/re-priced to match the Zeffy page exactly: Panther Friend ($50), Panther Bestie ($100), Panther Sweetheart ($250), Loyal Panther ($500), Panther Platinum ($1,000) — perk wording also copied from Zeffy so the site and checkout page agree
+
+## 14. Birthday Grams (`/admin` → Fundraisers → "Student Birthday Grams")
+- [x] Added as a fundraiser card on `/fundraising` linking to your Zeffy ticketing page (`https://www.zeffy.com/en-US/ticketing/student-birthday-grams`)
+
+## 15. Volunteer sign-ups (`/admin` → Volunteer Opportunities)
+- [x] Added a "Sign-Up Link" field so each locally-added volunteer opportunity can link to a Google Form, SignUpGenius, etc. — same behavior already worked for Google Calendar-based opportunities
+
+## 16. About page expansion (`/about`)
+- [x] Board split into "Executive Board" (President, VP Membership, Treasurer, Secretary, Parliamentarian) and "Committee Chairs" (Hospitality, Programs, Arts & Education, Dads Club) sections
+- [ ] "What Does the PTA Do?" — replace placeholder text in `/admin` → Page Text → "What Does the PTA Do?"
+- [ ] "PTA Dues Explained" — replace placeholder text and real dues amount in `/admin` → Page Text → "PTA Dues Explained"
+- [ ] FAQs — review/edit the 6 starter questions in `/admin` → FAQs (shared with the FAQ section on `/contact`)
+
+## 17. Teacher Wish Lists (`/admin` → Teacher Wish Lists, page at `/support-teachers`)
+- [ ] Replace the 6 placeholder grade entries (Kindergarten–5th) with real teacher names and Amazon cart links once teachers provide them
+- [ ] Add entries for specials (Art, Music, PE, Library, etc.) if those teachers want to participate too
 
 ## 13. Other
 - [ ] `astro.config.mjs` — update `site:` to your real domain once deployed

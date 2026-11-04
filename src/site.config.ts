@@ -51,9 +51,9 @@ const siteConfig = {
 
   // ---- External links (fill these in when you have them) ----
   links: {
-    joinPtaUrl: 'https://txpta.my.salesforce-sites.com/JoinPTA',
-    sponsorshipDonationUrl: 'https://www.zeffy.com/en-US/ticketing/parkview-elementary-pta-sponsorships',
-    storeUrl: 'https://TODO-add-your-spirit-shop-link.example.com', // TODO
+    joinPtaUrl: 'https://www.joinpta.org',
+    sponsorshipDonationUrl: 'https://www.zeffy.com/en-US/donation-form/parkview-pta-sponsorships',
+    storeUrl: 'https://www.aledobrandingco.com/sr/4629883',
     googleCalendarEmbedUrl: 'https://calendar.google.com/calendar/embed?src=kellerparkviewpta%40gmail.com&ctz=America%2FChicago',
     googleCalendarSubscribeUrl: 'https://calendar.google.com/calendar/ical/kellerparkviewpta%40gmail.com/public/basic.ics',
     // ---- Volunteer Opportunities calendar (separate from the main calendar above) ----

@@ -2,25 +2,56 @@
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import BoardMemberCard from '../components/BoardMemberCard.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 
 const board = (await getCollection('board')).sort((a, b) => a.data.order - b.data.order);
+const executiveBoard = board.filter((m) => m.data.category === 'Executive Board');
+const committeeChairs = board.filter((m) => m.data.category === 'Committee Chair');
+
 const mission = await getEntry('pages', 'mission');
 const aboutStory = await getEntry('pages', 'about-story');
 const bylaws = await getEntry('pages', 'bylaws');
+const whatWeDo = await getEntry('pages', 'what-pta-does');
+const duesExplained = await getEntry('pages', 'dues-explained');
 const { Content: MissionContent } = mission ? await render(mission) : { Content: null };
 const { Content: StoryContent } = aboutStory ? await render(aboutStory) : { Content: null };
 const { Content: BylawsContent } = bylaws ? await render(bylaws) : { Content: null };
+const { Content: WhatWeDoContent } = whatWeDo ? await render(whatWeDo) : { Content: null };
+const { Content: DuesContent } = duesExplained ? await render(duesExplained) : { Content: null };
+
+const faqs = (await getCollection('faqs'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, answer: f.data.answer }));
 ---
 
 <Layout title="About & Board" description="Meet the Parkview Elementary PTA board and learn our mission.">
-  <PageHero eyebrow="About Us" title="Our PTA Board" subtitle="Meet the volunteers working behind the scenes for Parkview families." />
+  <PageHero eyebrow="About Us" title="Get to Know Your Parkview PTA" subtitle="What we do, who runs it, and how to get involved." />
 
   <section class="section !pt-0">
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {board.map((member) => <BoardMemberCard member={member} />)}
+    <div class="reading-panel mx-auto max-w-3xl">
+      <h2 class="mb-3 font-display text-2xl font-bold">What Does the PTA Do?</h2>
+      {WhatWeDoContent && <WhatWeDoContent />}
     </div>
   </section>
+
+  <section class="section !pt-0">
+    <h2 class="mb-8 text-center font-display text-3xl font-bold text-paper">Executive Board</h2>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {executiveBoard.map((member) => <BoardMemberCard member={member} />)}
+    </div>
+  </section>
+
+  {
+    committeeChairs.length > 0 && (
+      <section class="section !pt-0">
+        <h2 class="mb-8 text-center font-display text-3xl font-bold text-paper">Committee Chairs</h2>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {committeeChairs.map((member) => <BoardMemberCard member={member} />)}
+        </div>
+      </section>
+    )
+  }
 
   <section class="bg-paper py-16 text-ink sm:py-24">
     <div class="section !py-0 grid gap-8 lg:grid-cols-2">
@@ -37,9 +68,24 @@ const { Content: BylawsContent } = bylaws ? await render(bylaws) : { Content: nu
 
   <section class="section">
     <div class="reading-panel mx-auto max-w-3xl">
+      <h2 class="mb-3 font-display text-2xl font-bold">PTA Dues Explained</h2>
+      {DuesContent && <DuesContent />}
+      <a href="/join" class="mt-4 inline-block font-bold text-gold hover:underline">Join the PTA →</a>
+    </div>
+  </section>
+
+  <section class="section !pt-0">
+    <div class="reading-panel mx-auto max-w-3xl">
       <h2 class="mb-3 font-display text-2xl font-bold">Bylaws & Documents</h2>
       {BylawsContent && <BylawsContent />}
       <a href="/forms-documents" class="mt-4 inline-block font-bold text-gold hover:underline">View all forms & documents →</a>
+    </div>
+  </section>
+
+  <section class="section !pt-0">
+    <h2 class="mb-6 text-center font-display text-2xl font-bold text-paper">Frequently Asked Questions</h2>
+    <div class="mx-auto max-w-2xl">
+      <FaqAccordion items={faqs} />
     </div>
   </section>
 </Layout>

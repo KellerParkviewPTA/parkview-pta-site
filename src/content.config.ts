@@ -51,6 +51,7 @@ const board = defineCollection({
       email: z.string().email().optional(),
       photo: image().optional(),
       order: z.number().default(99),
+      category: z.enum(['Executive Board', 'Committee Chair']).default('Executive Board'),
     }),
 });
 
@@ -66,6 +67,7 @@ const volunteerOpportunities = defineCollection({
     spotsFilled: z.number().default(0),
     contactName: z.string().optional(),
     contactEmail: z.string().email().optional(),
+    signupUrl: z.string().optional(),
   }),
 });
 
@@ -154,6 +156,26 @@ const sponsorshipTiers = defineCollection({
   }),
 });
 
+const teacherWishlists = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/teacher-wishlists' }),
+  schema: z.object({
+    grade: z.string(), // e.g. "Kindergarten", "1st Grade", "Art / Music / PE"
+    teacherName: z.string().optional(),
+    wishlistUrl: z.string().optional(),
+    notes: z.string().optional(),
+    order: z.number().default(99),
+  }),
+});
+
+const faqs = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/faqs' }),
+  schema: z.object({
+    question: z.string(),
+    answer: z.string(),
+    order: z.number().default(99),
+  }),
+});
+
 // Long-form editable page text (mission, about story, bylaws, legal pages, etc.)
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
@@ -186,5 +208,7 @@ export const collections = {
   'store-items': storeItems,
   'sponsorship-tiers': sponsorshipTiers,
   pages,
+  faqs,
+  'teacher-wishlists': teacherWishlists,
   alert,
 };

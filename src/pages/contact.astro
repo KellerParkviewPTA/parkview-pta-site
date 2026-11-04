@@ -4,25 +4,11 @@ import PageHero from '../components/PageHero.astro';
 import ContactForm from '../components/forms/ContactForm.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import siteConfig from '../site.config';
+import { getCollection } from 'astro:content';
 
-const faqs = [
-  {
-    question: 'How do I join the PTA?',
-    answer: 'Visit our Join the PTA page. Membership takes less than 2 minutes and no meetings are required.',
-  },
-  {
-    question: 'How can I volunteer?',
-    answer: 'Visit our Volunteer page to see current opportunities, or fill out the general interest form and we will match you up.',
-  },
-  {
-    question: 'Where does my membership money go?',
-    answer: 'Every dollar supports Parkview classrooms, teacher appreciation, and community events. See our Fundraising page for specifics.',
-  },
-  {
-    question: 'How do I stay up to date on PTA news and events?',
-    answer: 'Check the News and Calendar pages, or follow us on Facebook and Instagram for the latest updates.',
-  },
-];
+const faqs = (await getCollection('faqs'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, answer: f.data.answer }));
 ---
 
 <Layout title="Contact Us" description="Get in touch with the Parkview Elementary PTA.">
